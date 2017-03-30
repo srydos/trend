@@ -1,32 +1,33 @@
 #!/usr/bin/env ruby
-WORK_DIR=Dir.getwd
-require 'twitter'
-require 'yaml'
-key = YAML.load_file(WORK_DIR + "/user.yml")
-client = Twitter::REST::Client.new(
-  consumer_key:        key["consumer_key"],
-  consumer_secret:     key["consumer_secret"],
-  access_token:        key["access_token"],
-  access_token_secret: key["access_token_secret"]
-)
-#reply対象id
-tweet_id=ARGV[0].to_i
-if !tweet_id.is_a?(Integer) or tweet_id==0 then
-  puts 'reply対象のid不正'
-  exit
-end
-if ARGV.length < 2 then
-  puts '引数足んないよ'
+WORK_DIR=File.expand_path(__FILE__).sub(/[^\/]+$/,'')
+require WORK_DIR + 'TetesolTwitter.rb'
+tweet_user = TetesolTwitter.new
+msg = ''
+#reply対象idのバリデーション
+target_tweet_id = ARGV[0].to_i
+if !target_tweet_id.is_a?(Integer) or target_tweet_id == 0 then
+  puts 'target_tweet_id invalid!'
   exit
 end
 
-#reply対象判定
-msg=ARGV[1]
-if msg==nil then
+#引数チェック
+if ARGV.length < 1 then
+  puts 'args:(reply target tweet_id)(text)'
+  exit
+end
+
+#replyIDだけが設定されていた場合は標準入力を受け取る
+if ARGV[1] == nil or ARGV[1] == '' then
   print "input massage! : "
   msg=STDIN.gets
+elsif ARGV.length >= 3 then
+  #半角スペース対応
+  tweet_text = ARGV
+  tweet_text.shift.each do | text |
+    msg += text + ' '
+  end
+  msg[/ $/]= ''
+else 
+  msg = ARGV[1]
 end
-user = Twitter.status( tweet_id ).user
-msg="@#{user.screen_name} " + msg
-puts msg
-#client.update(msg,{:in_reply_to_status_id => tweet_id})
+tweet_user.reply( target_tweet_id, msg )
