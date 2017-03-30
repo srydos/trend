@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
-WORK_DIR=Dir.getwd
-require 'twitter'
-require 'pp'
-require 'yaml'
-require 'date' #そのうちいらなくなる
+require 'date' 
+WORK_DIR=File.expand_path(__FILE__).sub(/[^\/]+$/,'')
+require WORK_DIR + 'TetesolTwitter.rb'
+twitter_user = TetesolTwitter.new
 #ツイート時刻取得
 def tweet_id2time(id)
   case id
@@ -13,29 +12,22 @@ def tweet_id2time(id)
     nil
   end
 end
-#ツイートアカウント取得
-key = YAML.load_file(WORK_DIR + "/user.yml")
-client = Twitter::REST::Client.new(
-  consumer_key:        key["consumer_key"],
-  consumer_secret:     key["consumer_secret"],
-  access_token:        key["access_token"],
-  access_token_secret: key["access_token_secret"]
-)
+#YAMLにして同ディレクトリに排出
+def export_yaml( trends_hash )
+  open("./data_trend.yml","a+") do |e|
+    YAML.dump(trends_hash,e)
+  end
+end
 #トレンドを表示 日本2345896 
-trends_local_plane = client.local_trends(23424856)
+trends_local_plane = twitter_user.local_trends( 23424856 )
 trends_hash = {}
 trend_data  = []
 trends_hash["Time"] = Time.now
 #hash in array in jsonの入れ子になっている
 trends_local_plane.to_hash[:trends].each do | hash |
-  #:urlは:queryと中身が同じなので取り除く
+  #:urlは:queryと実質中身が同じなので取り除く
   hash.delete(:url)
   trend_data << hash
 end
 trends_hash["data"] = trend_data
-#  p rec.delete_if{ | key, value | key == :url};}
-#trends_hash["data"] = trends_local_plane.map{ |rec| rec.to_hash }
-#trends_hash.map{|item| p item }
-open("./data_trend.yml","a+") do |e|
-  YAML.dump(trends_hash,e)
-end
+export_yaml( trends_hash )
