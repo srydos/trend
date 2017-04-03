@@ -36,7 +36,6 @@ class TetesolTwitter
       target_user = client.status( target_tweet_id ).user
     rescue
       puts 'target_user was not found...'
-      #exit
       return
     end
     msg = "@#{target_user.screen_name} " + text
@@ -46,17 +45,19 @@ class TetesolTwitter
   def home_timeline( last_tweet_id )
     client.home_timeline({ :since_id => last_tweet_id })
   end
-<<<<<<< HEAD:TetesolTwitter.rb
   def local_trends( locale_code = 0 )
     hash = client.local_trends ( locale_code )
   end
   def search( query = '' )
     timeline = client.search(query)
     p timeline
-=======
+  end
   #mentionをgetする
   def mention_timeline
     client.mention_timeline
->>>>>>> d86be25bf657b5dc31ae1d955ec73bc858cda490:Class/TetesolTwitter.rb
+  end
+  #mentionをgetする
+  def mention_timeline
+  #  client.mention_timeline
   end
 end
