@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'date' 
 WORK_DIR=File.expand_path(__FILE__).sub(/[^\/]+$/,'')
-require WORK_DIR + 'TetesolTwitter.rb'
+require WORK_DIR + 'Class/TetesolTwitter.rb'
 twitter_user = TetesolTwitter.new
 #ツイート時刻取得
 def tweet_id2time(id)
