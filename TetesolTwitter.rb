@@ -41,7 +41,11 @@ class TetesolTwitter
   def home_timeline( last_tweet_id )
     client.home_timeline({ :since_id => last_tweet_id })
   end
-  def local_trends( locale_code )
+  def local_trends( locale_code = 0 )
     hash = client.local_trends ( locale_code )
+  end
+  def search( query = '' )
+    timeline = client.search(query)
+    p timeline
   end
 end
