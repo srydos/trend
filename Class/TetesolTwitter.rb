@@ -54,7 +54,7 @@ class TetesolTwitter
   end
   #mentionをgetする
   def mention_timeline
-  #  client.mention_timeline
+    client.mention_timeline
   end
   #mentionをgetする
   def mention_timeline
