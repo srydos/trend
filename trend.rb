@@ -2,7 +2,7 @@
 require 'date' 
 WORK_DIR=File.expand_path(__FILE__).sub(/[^\/]+$/,'')
 require WORK_DIR + 'Class/TetesolTwitter.rb'
-twitter_user = TetesolTwitter.new
+twitter_user = TetesolTwitter.new('Config/user.yml')
 #ツイート時刻取得
 def tweet_id2time(id)
   case id
