@@ -15,4 +15,4 @@ trends_local_plane.to_hash[:trends].each do | hash |
   trend_data << hash
 end
 trends_hash["data"] = trend_data
-twitter_user.tweet_print_yaml( trends_hash )
+twitter_user.tweet_print_yaml( trends_hash, "./data_trend.yml")
